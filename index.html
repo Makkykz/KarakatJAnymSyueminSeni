@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Для тебя ❤️</title>
+
+<style>
+body{
+    margin:0;
+    overflow:hidden;
+    font-family: Arial;
+    text-align:center;
+    color:white;
+    background:linear-gradient(45deg,#ff6ec4,#7873f5);
+}
+
+.container{
+    margin-top:15%;
+}
+
+h1{
+    font-size:45px;
+    text-shadow:0 0 15px black;
+}
+
+button{
+    padding:15px 35px;
+    font-size:22px;
+    margin:15px;
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+}
+
+#yes{
+    background:#4CAF50;
+    color:white;
+}
+
+#no{
+    background:#ff2b2b;
+    color:white;
+    position:absolute;
+}
+
+#reason{
+    font-size:25px;
+    text-shadow:0 0 10px black;
+}
+
+.heart{
+    position:absolute;
+    color:pink;
+    animation: fall linear forwards;
+}
+
+@keyframes fall{
+    to{
+        transform: translateY(100vh);
+        opacity:0;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<h1>Пойдёшь со мной на свидание на стриме? 💕</h1>
+
+<button id="yes">Да 💖</button>
+<button id="no">Нет 🙈</button>
+
+<div id="reason"></div>
+</div>
+
+<script>
+let noCount=0;
+const noBtn=document.getElementById("no");
+
+const texts=[
+"Почему нет? 🥺",
+"Может всё-таки да? 👉👈",
+"Я буду очень стараться 😭",
+"Ну пожалуйста 💞",
+"Ладно ты победила 😳"
+];
+
+function moveButton(){
+    const x=Math.random()*(window.innerWidth-100);
+    const y=Math.random()*(window.innerHeight-50);
+    noBtn.style.left=x+"px";
+    noBtn.style.top=y+"px";
+}
+
+/* ПК */
+noBtn.addEventListener("mouseover", ()=>{
+    if(noCount<5) moveButton();
+});
+
+/* телефон */
+noBtn.addEventListener("touchstart",(e)=>{
+    if(noCount<5){
+        e.preventDefault();
+        moveButton();
+    }
+});
+
+/* если поймали */
+noBtn.addEventListener("click",()=>{
+    noCount++;
+
+    if(noCount<=5){
+        document.getElementById("reason").innerText=texts[noCount-1];
+    }
+
+    if(noCount===5){
+        noBtn.style.display="none";
+        document.getElementById("reason").innerText="Хорошо 😏 теперь только ДА";
+    }
+});
+
+/* ДА */
+document.getElementById("yes").onclick=()=>{
+    const msg=new SpeechSynthesisUtterance("Ураааа! Я ждал этого!");
+    msg.lang="ru-RU";
+    speechSynthesis.speak(msg);
+
+    document.body.innerHTML="<h1 style='margin-top:20%;font-size:60px'>УРААА ❤️<br>Жду тебя на стриме 😘</h1>";
+};
+
+/* сердечки */
+setInterval(()=>{
+    const heart=document.createElement("div");
+    heart.className="heart";
+    heart.innerHTML="❤";
+    heart.style.left=Math.random()*100+"vw";
+    heart.style.fontSize=(20+Math.random()*30)+"px";
+    heart.style.animationDuration=(3+Math.random()*2)+"s";
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(),5000);
+},300);
+</script>
+
+</body>
+</html>
