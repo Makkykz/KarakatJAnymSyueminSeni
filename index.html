@@ -92,32 +92,27 @@ function moveButton(){
     noBtn.style.top=y+"px";
 }
 
-/* ПК */
-noBtn.addEventListener("mouseover", ()=>{
-    if(noCount<5) moveButton();
-});
-
-/* телефон */
-noBtn.addEventListener("touchstart",(e)=>{
+function noClicked(e){
     if(noCount<5){
         e.preventDefault();
-        moveButton();
-    }
-});
+        noCount++;
 
-/* если поймали */
-noBtn.addEventListener("click",()=>{
-    noCount++;
-
-    if(noCount<=5){
         document.getElementById("reason").innerText=texts[noCount-1];
+
+        moveButton();
     }
 
     if(noCount===5){
         noBtn.style.display="none";
         document.getElementById("reason").innerText="Хорошо 😏 теперь только ДА";
     }
-});
+}
+
+/* ПК */
+noBtn.addEventListener("click", noClicked);
+
+/* телефон */
+noBtn.addEventListener("touchstart", noClicked);
 
 /* ДА */
 document.getElementById("yes").onclick=()=>{
