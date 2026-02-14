@@ -14,20 +14,7 @@ body{
     background:black;
 }
 
-/* фон сердечки */
-.bgheart{
-    position:absolute;
-    color:#ff4da6;
-    animation: float 6s linear infinite;
-    opacity:0.3;
-}
-@keyframes float{
-    from{transform:translateY(100vh)}
-    to{transform:translateY(-10vh)}
-}
-
 .container{
-    position:relative;
     margin-top:12%;
 }
 
@@ -39,7 +26,6 @@ h1{
 .date{
     font-size:30px;
     margin-bottom:15px;
-    text-shadow:0 0 15px white;
 }
 
 button{
@@ -49,7 +35,6 @@ button{
     border:none;
     border-radius:12px;
     cursor:pointer;
-    transition:.3s;
 }
 
 #yes{
@@ -57,55 +42,19 @@ button{
     box-shadow:0 0 20px #00ff88;
 }
 
-#yes:hover{
-    transform:scale(1.1);
-}
-
 #no{
     background:#ff2b2b;
     position:absolute;
-    box-shadow:0 0 20px red;
 }
 
 #reason{
     font-size:25px;
     margin-top:20px;
 }
-
-/* эффекты */
-.heart,.confetti,.firework{
-    position:absolute;
-    pointer-events:none;
-}
-
-.heart{
-    color:pink;
-    animation: fall linear forwards;
-}
-
-.confetti{
-    width:10px;height:10px;
-    animation: fall linear forwards;
-}
-
-.firework{
-    width:6px;height:6px;
-    border-radius:50%;
-    animation: explode 1s linear forwards;
-}
-
-@keyframes fall{
-    to{transform:translateY(100vh);opacity:0;}
-}
-
-@keyframes explode{
-    to{transform:translate(var(--x),var(--y));opacity:0;}
-}
 </style>
 </head>
 <body>
 
-<!-- музыка -->
 <audio id="music" loop>
 <source src="music.mp3">
 </audio>
@@ -114,7 +63,7 @@ button{
 
 <div class="date">14 февраля 💖</div>
 
-<h1 id="text"></h1>
+<h1>Каракат Жаным, ты будешь моей валентинкой? 💕</h1>
 
 <button id="yes">Да 💖</button>
 <button id="no">Нет 🙈</button>
@@ -125,45 +74,15 @@ button{
 
 <script>
 
-/* запуск музыки после первого клика */
-document.addEventListener("click", ()=>{
-    document.getElementById("music").play();
-},{ once:true });
-
-/* печатающийся текст */
-const message="Каракат Жаным, ты будешь моей валентинкой? 💕";
-let i=0;
-function typing(){
-    if(i<message.length){
-        document.getElementById("text").innerHTML+=message[i];
-        i++;
-        setTimeout(typing,60);
-    }
-}
-typing();
-
-/* фон сердечки */
-setInterval(()=>{
-    const h=document.createElement("div");
-    h.className="bgheart";
-    h.innerHTML="❤";
-    h.style.left=Math.random()*100+"vw";
-    h.style.fontSize=(20+Math.random()*40)+"px";
-    document.body.appendChild(h);
-    setTimeout(()=>h.remove(),6000);
-},300);
-
-
-/* кнопка нет */
 let noCount=0;
 const noBtn=document.getElementById("no");
 
 const texts=[
 "Почему нет? 🥺",
 "Может всё-таки да? 👉👈",
-"Я очень старался 😭",
+"Я старался 😭",
 "Ну пожалуйста 💞",
-"Ладно ты победила 😳"
+"Теперь остался только один вариант 😏"
 ];
 
 function moveButton(){
@@ -182,7 +101,6 @@ function noClicked(e){
     }
     if(noCount===5){
         noBtn.style.display="none";
-        reason.innerText="Теперь остался только один вариант 😏";
     }
 }
 
@@ -190,63 +108,20 @@ noBtn.addEventListener("click",noClicked);
 noBtn.addEventListener("touchstart",noClicked);
 
 
-/* кнопка да */
+/* КНОПКА ДА — ЗАПУСК МУЗЫКИ */
 yes.onclick=()=>{
+
+    document.getElementById("music").play();
+
     const msg=new SpeechSynthesisUtterance("Каракат, я самый счастливый!");
     msg.lang="ru-RU";
     speechSynthesis.speak(msg);
 
     document.body.innerHTML=`
-    <h1 style='margin-top:6%;font-size:60px'>ОНА СКАЗАЛА ДА 💍❤️</h1>
-    <img src="photo.jpg" style="width:260px;border-radius:25px;margin-top:20px;border:5px solid white;box-shadow:0 0 40px pink;">
+    <h1 style='margin-top:10%;font-size:60px'>ОНА СКАЗАЛА ДА 💍❤️</h1>
+    <img src="photo.jpg" style="width:260px;border-radius:25px;margin-top:20px;border:5px solid white;">
     `;
-
-    startEffects();
 };
-
-/* эффекты */
-function startEffects(){
-    setInterval(createHeart,200);
-    setInterval(createConfetti,100);
-    setInterval(createFirework,700);
-}
-
-function createHeart(){
-    const el=document.createElement("div");
-    el.className="heart";
-    el.innerHTML="❤";
-    el.style.left=Math.random()*100+"vw";
-    el.style.fontSize=(20+Math.random()*30)+"px";
-    el.style.animationDuration=(3+Math.random()*2)+"s";
-    document.body.appendChild(el);
-    setTimeout(()=>el.remove(),5000);
-}
-
-function createConfetti(){
-    const el=document.createElement("div");
-    el.className="confetti";
-    el.style.left=Math.random()*100+"vw";
-    el.style.background="hsl("+Math.random()*360+",100%,50%)";
-    el.style.animationDuration="3s";
-    document.body.appendChild(el);
-    setTimeout(()=>el.remove(),3000);
-}
-
-function createFirework(){
-    for(let i=0;i<20;i++){
-        const el=document.createElement("div");
-        el.className="firework";
-        el.style.left="50vw";
-        el.style.top="50vh";
-        const x=(Math.random()-0.5)*300+"px";
-        const y=(Math.random()-0.5)*300+"px";
-        el.style.setProperty("--x",x);
-        el.style.setProperty("--y",y);
-        el.style.background="hsl("+Math.random()*360+",100%,50%)";
-        document.body.appendChild(el);
-        setTimeout(()=>el.remove(),1000);
-    }
-}
 </script>
 
 </body>
